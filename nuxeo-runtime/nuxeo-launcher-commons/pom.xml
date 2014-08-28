@@ -10,6 +10,7 @@
   <artifactId>nuxeo-launcher-commons</artifactId>
   <name>Nuxeo Launcher Commons</name>
   <description>Utility classes for Nuxeo launchers</description>
+  <version>5.9.3-NXP-14568</version>
 
   <dependencies>
     <dependency>

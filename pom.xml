@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.nuxeo</groupId>
   <artifactId>nuxeo-ecm</artifactId>
-  <version>5.9.3</version>
+  <version>5.9.3-NXCONNECT</version>
   <packaging>pom</packaging>
   <name>Nuxeo ECM Projects</name>
   <description>Nuxeo ECM Platform and related components.</description>
@@ -192,7 +192,7 @@
       <dependency>
         <groupId>org.nuxeo.runtime</groupId>
         <artifactId>nuxeo-launcher-commons</artifactId>
-        <version>${nuxeo.runtime.version}</version>
+        <version>5.9.3-NXP-14568</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.runtime</groupId>
@@ -227,7 +227,7 @@
       <dependency>
         <groupId>org.nuxeo.runtime</groupId>
         <artifactId>nuxeo-connect-standalone</artifactId>
-        <version>${nuxeo.runtime.version}</version>
+        <version>5.9.3-NXP-14568</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.runtime</groupId>
