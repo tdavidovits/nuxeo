@@ -278,7 +278,7 @@ public class ActionService extends DefaultComponent implements ActionManager {
                     ff.className).newInstance();
             filter.setId(ff.id);
             getFilterRegistry().addFilter(filter);
-        } catch (Exception e) {
+        } catch (ReflectiveOperationException e) {
             log.error("Failed to create action filter", e);
         }
     }
