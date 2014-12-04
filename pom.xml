@@ -373,7 +373,7 @@
       <dependency>
         <groupId>org.nuxeo.ecm.core</groupId>
         <artifactId>nuxeo-core-storage-sql</artifactId>
-        <version>${nuxeo.core.version}</version>
+        <version>5.9.3-patch-NXP-14360</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.lib.core</groupId>
