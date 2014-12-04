@@ -791,7 +791,7 @@
       <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>
         <artifactId>nuxeo-admin-center</artifactId>
-        <version>${nuxeo.features.version}</version>
+        <version>5.9.3-patch-NXP-14377</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>
