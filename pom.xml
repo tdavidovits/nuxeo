@@ -295,7 +295,7 @@
       <dependency>
         <groupId>org.nuxeo.lib.runtime</groupId>
         <artifactId>nuxeo-runtime-tomcat-adapter</artifactId>
-        <version>${nuxeo.runtime.version}</version>
+        <version>5.9.3-patch-NXP-14462</version>
       </dependency>
 
       <!-- Nuxeo Core -->
