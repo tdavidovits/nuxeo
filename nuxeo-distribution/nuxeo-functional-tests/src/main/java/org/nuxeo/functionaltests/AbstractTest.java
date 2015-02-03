@@ -209,7 +209,7 @@ public abstract class AbstractTest {
             // Does not work, but leave code for when it does
             // Workaround: use 127.0.0.2
             proxy.setNoProxy("");
-            profile.setProxyPreferences(proxy);
+            dc.setCapability(CapabilityType.PROXY, proxy);
         }
         dc.setCapability(FirefoxDriver.PROFILE, profile);
         driver = new FirefoxDriver(dc);
