@@ -95,6 +95,10 @@ public class TracerFactory implements TracerFactoryMBean {
             traces.clear();
         }
 
+        protected int size() {
+            return traces.size();
+        }
+
     }
 
     /**
@@ -135,6 +139,10 @@ public class TracerFactory implements TracerFactoryMBean {
         }
         if (trace.getError() != null) {
             lastError = trace;
+        }
+        chainTraces = tracesCache.getIfPresent(chainId);
+        if (chainTraces.size() != 0) {
+            chainTraces.removeTrace(1);
         }
         return tracesCache.getIfPresent(chainId).add(trace);
     }
