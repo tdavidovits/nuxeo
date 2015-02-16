@@ -14,8 +14,10 @@ package org.nuxeo.ecm.core.storage.sql.ra;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.resource.ResourceException;
 import javax.resource.cci.ConnectionFactory;
@@ -24,6 +26,7 @@ import javax.resource.cci.Interaction;
 import javax.resource.cci.LocalTransaction;
 import javax.resource.cci.ResultSetInfo;
 
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.core.api.Lock;
 import org.nuxeo.ecm.core.query.QueryFilter;
@@ -35,6 +38,7 @@ import org.nuxeo.ecm.core.storage.sql.Model;
 import org.nuxeo.ecm.core.storage.sql.Node;
 import org.nuxeo.ecm.core.storage.sql.Session;
 import org.nuxeo.ecm.core.storage.sql.SessionImpl;
+import org.nuxeo.ecm.core.storage.sql.SessionImpl.QueryResultContextException;
 import org.nuxeo.runtime.services.streaming.FileSource;
 
 /**
@@ -86,6 +90,7 @@ public class ConnectionImpl implements Session {
      * Called by {@link ManagedConnectionImpl#removeConnection}.
      */
     protected void disassociate() {
+        closeStillOpenQueryResults();
         session = null;
     }
 
@@ -361,7 +366,32 @@ public class ConnectionImpl implements Session {
     @Override
     public IterableQueryResult queryAndFetch(String query, String queryType,
             QueryFilter queryFilter, Object... params) throws StorageException {
-        return getSession().queryAndFetch(query, queryType, queryFilter, params);
+        IterableQueryResult result = getSession().queryAndFetch(query, queryType, queryFilter, params);
+        noteQueryResult(result);
+        return result;
+    }
+
+    protected final Set<QueryResultContextException> queryResults = new HashSet<QueryResultContextException>();
+
+    protected void noteQueryResult(IterableQueryResult result) {
+        queryResults.add(new QueryResultContextException(result));
+    }
+
+    protected void closeStillOpenQueryResults() {
+        for (QueryResultContextException context : queryResults) {
+            if (!context.queryResult.isLife()) {
+                continue;
+            }
+            try {
+                context.queryResult.close();
+            } catch (RuntimeException e) {
+                LogFactory.getLog(ConnectionImpl.class).error("Cannot close query result", e);
+            } finally {
+                LogFactory.getLog(ConnectionImpl.class).warn(
+                        "Closing a query results for you, check stack trace for allocating point", context);
+            }
+        }
+        queryResults.clear();
     }
 
     @Override
