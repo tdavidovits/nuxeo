@@ -7,6 +7,7 @@
   </parent>
   <artifactId>nuxeo-automation-core</artifactId>
   <name>Nuxeo Automation Core</name>
+  <version>5.9.3-patch-NXP-16453</version>
   <description>Automation Framework and Core Operations</description>
   <dependencies>
     <dependency>
