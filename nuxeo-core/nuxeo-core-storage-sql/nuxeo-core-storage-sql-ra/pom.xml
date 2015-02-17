@@ -10,7 +10,7 @@
   <artifactId>nuxeo-core-storage-sql-ra</artifactId>
   <name>Nuxeo Core SQL Storage JCA Resource Adapter</name>
   <description>Nuxeo Core: SQL Storage JCA Resource Adapter.</description>
-
+  <version>5.9.3-patch-NXP-16530</version>
   <dependencies>
     <!-- setting direct dependency in provided scope do not filter indirect dependencies
       in assembly -->
