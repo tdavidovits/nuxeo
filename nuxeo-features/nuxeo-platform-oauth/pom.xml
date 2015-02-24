@@ -9,6 +9,7 @@
 
   <artifactId>nuxeo-platform-oauth</artifactId>
   <name>Nuxeo OAuth filters and services</name>
+  <version>5.9.3-patch-NXP-14885</version>
   <description>
     Provides infrastructure for OAuth Consumers and Providers management as well as 2 legged/3 legged auth
   </description>
