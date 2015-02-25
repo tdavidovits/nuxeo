@@ -829,7 +829,7 @@
       <dependency>
         <groupId>org.nuxeo.ecm.automation</groupId>
         <artifactId>nuxeo-automation-core</artifactId>
-        <version>${nuxeo.features.version}</version>
+        <version>5.9.3-patch-NXP-16453</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.automation</groupId>
