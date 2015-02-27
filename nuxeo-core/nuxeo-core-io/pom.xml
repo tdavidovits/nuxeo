@@ -10,6 +10,7 @@
   <artifactId>nuxeo-core-io</artifactId>
   <name>Nuxeo Core IO</name>
   <description>Nuxeo Core IO.</description>
+  <version>5.9.3-patch-NXP-16606</version>
 
   <dependencies>
     <dependency>
