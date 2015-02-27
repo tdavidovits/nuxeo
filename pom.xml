@@ -322,7 +322,7 @@
       <dependency>
         <groupId>org.nuxeo.ecm.core</groupId>
         <artifactId>nuxeo-core-convert-plugins</artifactId>
-        <version>${nuxeo.core.version}</version>
+        <version>5.9.3-patch-NXP-16608</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.core</groupId>

@@ -8,6 +8,7 @@
   </parent>
 
   <artifactId>nuxeo-core-convert-plugins</artifactId>
+  <version>5.9.3-patch-NXP-16608</version>
   <name>Nuxeo Core Converter Service default plugins</name>
   <description>Nuxeo Core Blob conversion plugins</description>
 
