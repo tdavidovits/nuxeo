@@ -7,6 +7,7 @@
     <version>7.1</version>
   </parent>
 
+  <version>7.1-SU01</version>
   <artifactId>nuxeo-core-convert-plugins</artifactId>
   <name>Nuxeo Core Converter Service default plugins</name>
   <description>Nuxeo Core Blob conversion plugins</description>
