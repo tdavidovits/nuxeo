@@ -7,6 +7,7 @@
     <version>7.1</version>
   </parent>
 
+  <version>7.1-SU01</version>
   <artifactId>nuxeo-core-io</artifactId>
   <name>Nuxeo Core IO</name>
   <description>Nuxeo Core IO.</description>

@@ -205,7 +205,7 @@
       <dependency>
         <groupId>org.nuxeo.common</groupId>
         <artifactId>nuxeo-common</artifactId>
-        <version>${nuxeo.common.version}</version>
+        <version>${nuxeo.su.version}</version>
       </dependency>
 
       <!-- Nuxeo Runtime -->
@@ -355,7 +355,7 @@
       <dependency>
         <groupId>org.nuxeo.ecm.core</groupId>
         <artifactId>nuxeo-core-io</artifactId>
-        <version>${nuxeo.core.version}</version>
+        <version>${nuxeo.su.version}</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.core</groupId>
