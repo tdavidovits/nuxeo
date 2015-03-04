@@ -35,19 +35,19 @@ function closePopup() {
 
    <#if needWizard>
       Click the start link to start the installation wizard. <br/><br/><br/>
-      <A href="${Root.path}/install/form/${pkg.id}/0?source=${source}" class="installButton"> Start </a>
+      <A href="${Root.path}/install/form/${pkg.id}/0?source=${source?xml}" class="installButton"> Start </a>
    </#if>
 
    <#if !needWizard>
       Click the start link to start the installation process. <br/><br/><br/>
-      <a href="${Root.path}/install/run/${pkg.id}?source=${source}" class="installButton"> Start </a>
+      <a href="${Root.path}/install/run/${pkg.id}?source=${source?xml}" class="installButton"> Start </a>
    </#if>
 
    &nbsp;
    <#if source=="installer">
      <a href="javascript:closePopup()" class="installButton"> Cancel </a>
    <#else>
-     <a href="${Root.path}/packages/${source}" class="installButton"> Cancel </a>
+     <a href="${Root.path}/packages/${source?xml}" class="installButton"> Cancel </a>
    </#if>
   </div>
 

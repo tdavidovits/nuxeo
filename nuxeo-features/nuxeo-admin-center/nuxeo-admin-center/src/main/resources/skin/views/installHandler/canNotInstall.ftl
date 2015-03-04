@@ -17,7 +17,7 @@
       </#list>
     </ul>
     <br />
-    <a href="${Root.path}/packages/${source}" class="installButton"> Cancel </a>
+    <a href="${Root.path}/packages/${source?xml}" class="installButton"> Cancel </a>
   </div>
 
 </@block>

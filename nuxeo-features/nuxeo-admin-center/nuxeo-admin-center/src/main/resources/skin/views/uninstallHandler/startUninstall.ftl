@@ -29,8 +29,8 @@
 
     <br/>
     Click the start link to start the uninstall process. <br/><br/><br/>
-    <a href="${This.path}/run/${pkg.id}?source=${source}" class="installButton"> Start </a>
-      &nbsp; <a href="${Root.path}/packages/${source}" class="installButton"> Cancel </a>
+    <a href="${This.path}/run/${pkg.id}?source=${source?xml}" class="installButton"> Start </a>
+      &nbsp; <a href="${Root.path}/packages/${source?xml}" class="installButton"> Cancel </a>
   </div>
 
 </@block>

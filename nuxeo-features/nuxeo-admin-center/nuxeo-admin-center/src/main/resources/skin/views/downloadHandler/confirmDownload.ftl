@@ -25,7 +25,7 @@
     </table>
 
     <div class="alignCenter">
-      <a class="button" href="${Root.path}/download/start/${pkg.id}?source=${source}"> Confirm and Start the download </a>
+      <a class="button" href="${Root.path}/download/start/${pkg.id}?source=${source?xml}"> Confirm and Start the download </a>
     </div>
 
   </div>

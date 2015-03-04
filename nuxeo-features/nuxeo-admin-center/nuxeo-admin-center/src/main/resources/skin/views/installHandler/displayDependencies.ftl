@@ -7,7 +7,7 @@ var subWin;
 var installBaseUrl="${Root.path}/install/start/";
 var uninstallBaseUrl="${Root.path}/uninstall/start/";
 var downloadBaseUrl="${Root.path}/download/start/";
-var autoMode = ${autoMode};
+var autoMode = ${autoMode?xml};
 var lastDownloadStatus;
 
 function display(url) {
@@ -78,7 +78,7 @@ function refreshDownloadProgress(downloadStatus) {
     }, 1000);
   } else {
     // refresh
-    window.location.href="${Root.path}/install/start/${pkg.id}/?source=${source}";
+    window.location.href="${Root.path}/install/start/${pkg.id}/?source=${source?xml}";
   }
 }
 
@@ -201,10 +201,9 @@ $(document).ready(function() {
 
    <br/>
    <A href="javascript:downloadAllPackages()" id="downloadAllButton" class="installButton" style="display:none"> Download all packages </A>
-   <a href="${Root.path}/packages/${source}" class="installButton"> Cancel </a> &nbsp;
-   <A href="${Root.path}/install/bulkRun/${pkg.id}/?source=${source}" class="installButton" id="installAutoButton"> Installation of package ${pkg.id} and dependencies </a>
-   <A href="${Root.path}/install/start/${pkg.id}/?source=${source}" class="installButton" id="installManualButton"> Continue installation of package ${pkg.id} </a>
-
+   <a href="${Root.path}/packages/${source?xml}" class="installButton"> Cancel </a> &nbsp;
+   <A href="${Root.path}/install/bulkRun/${pkg.id}/?source=${source?xml}" class="installButton" id="installAutoButton"> Installation of package ${pkg.id} and dependencies </a>
+   <A href="${Root.path}/install/start/${pkg.id}/?source=${source?xml}" class="installButton" id="installManualButton"> Continue installation of package ${pkg.id} </a>
   </div>
 
 </@block>

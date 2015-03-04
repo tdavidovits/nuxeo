@@ -84,20 +84,20 @@
     <td> ${This.getStateLabel(pkg)} </td>
     <td class="alignCenter">
          <#if This.canDownload(pkg)>
-           <a class="button download" href="${Root.path}/download/start/${pkg.id}?source=${source}"> Download </a>
+           <a class="button download" href="${Root.path}/download/start/${pkg.id}?source=${source?xml}"> Download </a>
          </#if>
          <#if This.registrationRequired(pkg)> Registration required </#if>
          <#if This.canCancel(pkg)>
-           <a class="button cancel" href="${Root.path}/download/cancel/${pkg.id}?source=${source}"> Cancel </a>
+           <a class="button cancel" href="${Root.path}/download/cancel/${pkg.id}?source=${source?xml}"> Cancel </a>
          </#if>
          <#if This.canInstall(pkg)>
-           <a class="button install" href="${Root.path}/install/start/${pkg.id}?source=${source}"> Install </a>
+           <a class="button install" href="${Root.path}/install/start/${pkg.id}?source=${source?xml}"> Install </a>
            <#if This.canRemove(pkg)>
-             <a class="button remove" href="${Root.path}/remove/start/${pkg.id}?source=${source}"> Remove </a>
+             <a class="button remove" href="${Root.path}/remove/start/${pkg.id}?source=${source?xml}"> Remove </a>
            </#if>
          </#if>
          <#if This.canUnInstall(pkg)>
-           <a class="button uninstall" href="${Root.path}/uninstall/start/${pkg.id}?source=${source}&amp;filterOnPlatform=${filterOnPlatform}"> Uninstall </a>
+           <a class="button uninstall" href="${Root.path}/uninstall/start/${pkg.id}?source=${source?xml}&amp;filterOnPlatform=${filterOnPlatform?xml}"> Uninstall </a>
          </#if>
          <#if This.needsRestart(pkg)>
            <#if pkg.getState() == 5 >

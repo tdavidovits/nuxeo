@@ -5,7 +5,7 @@
 
 <@block name="body">
 <div class="infoMessage">
- Can not find package '${pkgId}'.
+ Can not find package '${pkgId?xml}'.
 </div>
 </@block>
 </@extends>
