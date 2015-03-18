@@ -60,6 +60,8 @@ public class UsersPageProvider extends
 
     protected List<DocumentModel> pageUsers;
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public List<DocumentModel> getCurrentPage() {
         if (pageUsers == null) {

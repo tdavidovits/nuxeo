@@ -92,6 +92,7 @@ public class PageProviderServiceImpl extends DefaultComponent implements
         pageProvider.setProperties(allProps);
         pageProvider.setSortable(desc.isSortable());
         pageProvider.setParameters(parameters);
+        pageProvider.setPageSizeOptions(desc.getPageSizeOptions());
 
         Long maxPageSize = desc.getMaxPageSize();
         if (maxPageSize != null) {
