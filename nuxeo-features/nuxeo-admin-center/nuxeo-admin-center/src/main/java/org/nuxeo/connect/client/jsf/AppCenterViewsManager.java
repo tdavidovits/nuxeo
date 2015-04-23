@@ -221,14 +221,14 @@ public class AppCenterViewsManager implements Serializable {
         }
         PackageManager pm = Framework.getLocalService(PackageManager.class);
         // TODO NXP-16228: should directly request the SNAPSHOT package (if only we knew its name!)
-        List<DownloadablePackage> pkgs = pm.listRemoteAssociatedStudioPackages();
-        DownloadablePackage snapshotPkg = StudioSnapshotHelper.getSnapshot(pkgs);
+        pm.flushCache();
+        DownloadablePackage snapshotPkg = pm.getCurrentUserStudioPackage();
         studioSnapshotUpdateError = null;
         resetStudioSnapshotValidationStatus();
         if (snapshotPkg != null) {
             isStudioSnapshopUpdateInProgress = true;
             try {
-                StudioAutoInstaller studioAutoInstaller = new StudioAutoInstaller(pm, snapshotPkg.getId(),
+                StudioAutoInstaller studioAutoInstaller = new StudioAutoInstaller(pm, snapshotPkg,
                         shouldValidateStudioSnapshot());
                 studioAutoInstaller.run();
             } finally {
@@ -354,7 +354,7 @@ public class AppCenterViewsManager implements Serializable {
     // TODO: plug a notifier for status to be shown to the user
     protected class StudioAutoInstaller implements Runnable {
 
-        protected final String packageId;
+        protected final DownloadablePackage pkg;
 
         protected final PackageManager pm;
 
@@ -363,9 +363,9 @@ public class AppCenterViewsManager implements Serializable {
          */
         protected final boolean validate;
 
-        protected StudioAutoInstaller(PackageManager pm, String packageId, boolean validate) {
+        protected StudioAutoInstaller(PackageManager pm, DownloadablePackage pkg, boolean validate) {
             this.pm = pm;
-            this.packageId = packageId;
+            this.pkg = pkg;
             this.validate = validate;
         }
 
@@ -375,39 +375,38 @@ public class AppCenterViewsManager implements Serializable {
                 ValidationStatus status = new ValidationStatus();
 
                 pm.flushCache();
-                DownloadablePackage remotePkg = pm.findRemotePackageById(packageId);
-                if (remotePkg == null) {
-                    status.addError(String.format("Cannot perform validation: remote package '%s' not found", packageId));
+                if (pkg == null) {
+                    status.addError("Cannot perform validation: no remote package found");
                     return;
                 }
-                PackageDependency[] pkgDeps = remotePkg.getDependencies();
+                PackageDependency[] pkgDeps = pkg.getDependencies();
                 if (log.isDebugEnabled()) {
-                    log.debug(String.format("%s target platforms: %s", remotePkg,
-                            ArrayUtils.toString(remotePkg.getTargetPlatforms())));
-                    log.debug(String.format("%s dependencies: %s", remotePkg, ArrayUtils.toString(pkgDeps)));
+                    log.debug(String.format("%s target platforms: %s", pkg,
+                            ArrayUtils.toString(pkg.getTargetPlatforms())));
+                    log.debug(String.format("%s dependencies: %s", pkg, ArrayUtils.toString(pkgDeps)));
                 }
 
                 // TODO NXP-11776: replace errors by internationalized
                 // labels
                 String targetPlatform = PlatformVersionHelper.getPlatformFilter();
-                if (!TargetPlatformFilterHelper.isCompatibleWithTargetPlatform(remotePkg, targetPlatform)) {
+                if (!TargetPlatformFilterHelper.isCompatibleWithTargetPlatform(pkg, targetPlatform)) {
                     status.addError(String.format("This package is not validated for your current platform: %s",
                             targetPlatform));
                 }
                 // check deps requirements
                 if (pkgDeps != null && pkgDeps.length > 0) {
-                    DependencyResolution resolution = pm.resolveDependencies(packageId, targetPlatform);
+                    DependencyResolution resolution = pm.resolveDependencies(pkg.getId(), targetPlatform);
                     if (resolution.isFailed() && targetPlatform != null) {
                         // retry without PF filter in case it gives more
                         // information
-                        resolution = pm.resolveDependencies(packageId, null);
+                        resolution = pm.resolveDependencies(pkg.getId(), null);
                     }
                     if (resolution.isFailed()) {
-                        status.addError(String.format("Dependency check has failed for package '%s' (%s)", packageId,
+                        status.addError(String.format("Dependency check has failed for package '%s' (%s)", pkg.getId(),
                                 resolution));
                     } else {
                         List<String> pkgToInstall = resolution.getInstallPackageIds();
-                        if (pkgToInstall != null && pkgToInstall.size() == 1 && packageId.equals(pkgToInstall.get(0))) {
+                        if (pkgToInstall != null && pkgToInstall.size() == 1 && pkg.getId().equals(pkgToInstall.get(0))) {
                             // ignore
                         } else if (resolution.requireChanges()) {
                             // do not install needed deps: they may not be
@@ -428,15 +427,15 @@ public class AppCenterViewsManager implements Serializable {
             if (Framework.isDevModeSet()) {
                 try {
                     PackageUpdateService pus = Framework.getLocalService(PackageUpdateService.class);
-                    LocalPackage pkg = pus.getPackage(packageId);
+                    LocalPackage localPkg = pus.getPackage(pkg.getId());
 
                     // Uninstall and/or remove if needed
-                    if (pkg != null) {
-                        log.info(String.format("Updating package %s...", pkg));
-                        if (pkg.getPackageState().isInstalled()) {
+                    if (localPkg != null) {
+                        log.info(String.format("Updating package %s...", localPkg));
+                        if (localPkg.getPackageState().isInstalled()) {
                             // First remove it to allow SNAPSHOT upgrade
-                            log.info("Uninstalling " + packageId);
-                            Task uninstallTask = pkg.getUninstallTask();
+                            log.info("Uninstalling " + localPkg.getId());
+                            Task uninstallTask = localPkg.getUninstallTask();
                             try {
                                 performTask(uninstallTask);
                             } catch (PackageException e) {
@@ -444,14 +443,14 @@ public class AppCenterViewsManager implements Serializable {
                                 throw e;
                             }
                         }
-                        pus.removePackage(packageId);
+                        pus.removePackage(localPkg.getId());
                     }
 
                     // Download
                     setStatus(SnapshotStatus.downloading, null);
                     DownloadingPackage downloadingPkg;
                     try {
-                        downloadingPkg = pm.download(packageId);
+                        downloadingPkg = pm.download(pkg.getId());
                     } catch (ConnectServerError e) {
                         setStatus(SnapshotStatus.error, e.getMessage());
                         return;
@@ -469,13 +468,7 @@ public class AppCenterViewsManager implements Serializable {
                         log.debug("studio snapshot package download completed, starting installation");
                         Thread.sleep(200);
                         setStatus(SnapshotStatus.saving, null);
-                        // FIXME JC: Is this a workaround for some issue?
-                        // downloadingPkg.isCompleted() is true!
-                        while (pus.getPackage(downloadingPkg.getId()) == null) {
-                            studioSnapshotDownloadProgress = downloadingPkg.getDownloadProgress();
-                            Thread.sleep(50);
-                            log.debug("downloading studio snapshot package");
-                        }
+                        assert pus.getPackage(downloadingPkg.getId()) != null;
                     } catch (PackageException | InterruptedException e) {
                         ExceptionUtils.checkInterrupt(e);
                         log.error("Error while downloading studio snapshot", e);
@@ -486,9 +479,9 @@ public class AppCenterViewsManager implements Serializable {
 
                     // Install
                     setStatus(SnapshotStatus.installing, null);
-                    log.info("Installing " + packageId);
-                    pkg = pus.getPackage(packageId);
-                    Task installTask = pkg.getInstallTask();
+                    log.info("Installing " + pkg.getId());
+                    localPkg = pus.getPackage(pkg.getId());
+                    Task installTask = localPkg.getInstallTask();
                     try {
                         performTask(installTask);
                     } catch (PackageException e) {
@@ -496,15 +489,15 @@ public class AppCenterViewsManager implements Serializable {
                         throw e;
                     }
                     // Refresh state
-                    pkg = pus.getPackage(packageId);
-                    lastUpdate = pus.getInstallDate(packageId);
+                    localPkg = pus.getPackage(localPkg.getId());
+                    lastUpdate = pus.getInstallDate(localPkg.getId());
                     setStatus(SnapshotStatus.completed, null);
                 } catch (PackageException e) {
                     log.error("Error while installing studio snapshot", e);
                     setStatus(SnapshotStatus.error, translate("label.studio.update.installation.error", e.getMessage()));
                 }
             } else {
-                InstallAfterRestart.addPackageForInstallation(packageId);
+                InstallAfterRestart.addPackageForInstallation(pkg.getId());
                 setStatus(SnapshotStatus.restartNeeded, null);
                 setupWizardAction.setNeedsRestart(true);
             }
