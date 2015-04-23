@@ -220,7 +220,6 @@ public class AppCenterViewsManager implements Serializable {
             return;
         }
         PackageManager pm = Framework.getLocalService(PackageManager.class);
-        // TODO NXP-16228: should directly request the SNAPSHOT package (if only we knew its name!)
         pm.flushCache();
         DownloadablePackage snapshotPkg = pm.getCurrentUserStudioPackage();
         studioSnapshotUpdateError = null;
@@ -281,9 +280,7 @@ public class AppCenterViewsManager implements Serializable {
     protected FileTime getLastUpdateDate() {
         if (lastUpdate == null) {
             PackageManager pm = Framework.getLocalService(PackageManager.class);
-            // TODO NXP-16228: should directly request the SNAPSHOT package (if only we knew its name!)
-            List<DownloadablePackage> pkgs = pm.listRemoteAssociatedStudioPackages();
-            DownloadablePackage snapshotPkg = StudioSnapshotHelper.getSnapshot(pkgs);
+            DownloadablePackage snapshotPkg = pm.getCurrentUserStudioPackage();
             if (snapshotPkg != null) {
                 PackageUpdateService pus = Framework.getLocalService(PackageUpdateService.class);
                 try {
@@ -302,10 +299,8 @@ public class AppCenterViewsManager implements Serializable {
     public String getStudioInstallationStatus() {
         if (studioSnapshotStatus == null) {
             PackageManager pm = Framework.getLocalService(PackageManager.class);
-            // TODO NXP-16228: should directly request the SNAPSHOT package (if only we knew its name!)
-            List<DownloadablePackage> pkgs = pm.listRemoteAssociatedStudioPackages();
+            DownloadablePackage snapshotPkg = pm.getCurrentUserStudioPackage();
             LocalPackage pkg = null;
-            DownloadablePackage snapshotPkg = StudioSnapshotHelper.getSnapshot(pkgs);
             if (snapshotPkg != null) {
                 try {
                     PackageUpdateService pus = Framework.getLocalService(PackageUpdateService.class);
