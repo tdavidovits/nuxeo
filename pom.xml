@@ -133,8 +133,8 @@
     <!-- nuxeo-distribution-tools is still used as a dependency -->
     <nuxeo.distribution.tools.version>1.15</nuxeo.distribution.tools.version>
     <!-- ant-assembly-maven-plugin is only used as a plugin -->
-    <ant.assembly.version>2.0.3</ant.assembly.version>
-    <nuxeo.ftest.version>1.7.18</nuxeo.ftest.version>
+    <ant.assembly.version>2.0.4-SNAPSHOT</ant.assembly.version>
+    <nuxeo.ftest.version>1.7.19-SNAPSHOT</nuxeo.ftest.version>
 
     <jsf.version>2.2.6</jsf.version>
     <nxjsf.version>2.2.6-NX01</nxjsf.version>
@@ -5008,14 +5008,14 @@
                 <banLatest>true</banLatest>
                 <banRelease>true</banRelease>
                 <banSnapshots>true</banSnapshots>
-                <!-- <unCheckedPluginList>org.nuxeo.build:ant-assembly-maven-plugin</unCheckedPluginList> -->
+                <unCheckedPluginList>org.nuxeo.build:ant-assembly-maven-plugin</unCheckedPluginList>
               </requirePluginVersions>
               <requireReleaseDeps>
                 <message>No Snapshots Allowed!</message>
                 <onlyWhenRelease>true</onlyWhenRelease>
                 <excludes>
                   <!-- <exclude>org.nuxeo.build:nuxeo-distribution-tools</exclude> -->
-                  <!-- <exclude>org.nuxeo:nuxeo-ftest:*:zip</exclude> -->
+                  <exclude>org.nuxeo:nuxeo-ftest:*:zip</exclude>
                   <exclude>org.nuxeo.connect:nuxeo-connect-client</exclude>
                   <!-- <exclude>org.jboss.seam:*</exclude> -->
                 </excludes>
@@ -5857,7 +5857,7 @@
           <plugin>
             <groupId>org.nuxeo.build</groupId>
             <artifactId>ant-assembly-maven-plugin</artifactId>
-            <inherited>false</inherited>
+            <inherited>true</inherited>
             <executions>
               <execution>
                 <id>setup-vcs</id>
@@ -5867,7 +5867,7 @@
                 </goals>
                 <configuration>
                   <buildFiles>
-                    <buildFile>${basedir}/integration/vcstests.xml</buildFile>
+                    <buildFile>artifact:org.nuxeo:nuxeo-ftest:/integration/vcstests.xml</buildFile>
                   </buildFiles>
                   <targets>
                     <target>vcs-tests-setup</target>
@@ -5880,6 +5880,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>properties-maven-plugin</artifactId>
+            <inherited>true</inherited>
             <executions>
               <execution>
                 <phase>initialize</phase>
@@ -5888,7 +5889,7 @@
                 </goals>
                 <configuration>
                   <files>
-                    <file>${user.home}/nuxeo-test-vcs.properties</file>
+                    <file>${project.build.directory}/nuxeo-test-vcs.properties</file>
                   </files>
                 </configuration>
               </execution>
