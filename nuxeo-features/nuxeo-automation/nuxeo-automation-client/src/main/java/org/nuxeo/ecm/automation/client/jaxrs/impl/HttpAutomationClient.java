@@ -64,7 +64,8 @@ public class HttpAutomationClient extends AsyncAutomationClient {
     }
 
     private void init(int httpConnectionTimeout) {
-        http = new DefaultHttpClient(new PoolingClientConnectionManager());
+        //TODO: WARNING
+        http = new DefaultHttpClient();
         this.httpConnectionTimeout = httpConnectionTimeout;
         // http.setCookieSpecs(null);
         // http.setCookieStore(null);

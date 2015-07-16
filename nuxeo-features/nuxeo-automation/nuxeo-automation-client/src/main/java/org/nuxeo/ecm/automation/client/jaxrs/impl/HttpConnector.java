@@ -13,13 +13,13 @@
 package org.nuxeo.ecm.automation.client.jaxrs.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Map;
 
 import javax.mail.internet.MimeMultipart;
 import javax.ws.rs.core.Response;
 
-import java.nio.charset.StandardCharsets;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -34,7 +34,6 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
 
 import org.nuxeo.ecm.automation.client.RemoteException;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.Connector;
@@ -103,7 +102,8 @@ public class HttpConnector implements Connector {
                     entity = new MultipartRequestEntity((MimeMultipart) obj);
                 } else {
                     try {
-                        entity = new StringEntity(obj.toString(), StandardCharsets.UTF_8);
+                        //TODO: WARNING
+                        entity = new StringEntity(obj.toString(), "UTF-8");
                     } catch (UnsupportedCharsetException e) {
                         // cannot happen
                         throw new RuntimeException("Cannot encode into UTF-8", e);
@@ -153,7 +153,15 @@ public class HttpConnector implements Connector {
             return request.handleResult(status, ctype, disp, entity.getContent());
         } finally {
             // needed to properly release resources and return the connection to the pool
-            EntityUtils.consume(entity);
+            //TODO: WARNING
+            if(entity != null) {
+                if(entity.isStreaming()) {
+                    InputStream instream = entity.getContent();
+                    if(instream != null) {
+                        instream.close();
+                    }
+                }
+            }
         }
     }
 
