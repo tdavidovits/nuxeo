@@ -407,7 +407,7 @@ public class SQLSession extends BaseSession implements EntrySource {
             if (fetchReferences) {
                 for (Reference reference : directory.getReferences()) {
                     List<String> targetIds = reference.getTargetIdsForSource(entry.getId());
-                    targetIds = new ArrayList<>(targetIds);
+                    targetIds = new ArrayList<String>(targetIds);
                     Collections.sort(targetIds);
                     try {
                         entry.setProperty(schemaName, reference.getFieldName(),
