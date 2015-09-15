@@ -21,10 +21,12 @@ import java.io.File;
 
 import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters;
 import org.nuxeo.ecm.platform.commandline.executor.api.CommandException;
+import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService;
 import org.nuxeo.ecm.platform.commandline.executor.api.CommandNotAvailable;
 import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult;
 import org.nuxeo.ecm.platform.picture.api.ImageInfo;
 import org.nuxeo.ecm.platform.picture.magick.MagickExecutor;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * Unit command to extract a simplified view of a JPEG file using ImageMagick =
@@ -40,13 +42,19 @@ public class ImageResizer extends MagickExecutor {
         if (targetDepth == -1) {
             targetDepth = ImageIdentifier.getInfo(inputFile).getDepth();
         }
-        CmdParameters params = new CmdParameters();
+        CommandLineExecutorService cles = Framework.getLocalService(CommandLineExecutorService.class);
+        CmdParameters params = cles.getDefaultCmdParameters();
         params.addNamedParameter("targetWidth", String.valueOf(targetWidth));
         params.addNamedParameter("targetHeight", String.valueOf(targetHeight));
         params.addNamedParameter("inputFilePath", inputFile);
         params.addNamedParameter("outputFilePath", outputFile);
         params.addNamedParameter("targetDepth", String.valueOf(targetDepth));
-        ExecResult res = execCommand("resizer", params);
+        String commandName = "resizer";
+        // hack to manage jpeg default background
+        if (outputFile.endsWith(JPEG_CONVERSATION_FORMAT)) {
+            commandName = "jpegResizer";
+        }
+        ExecResult res = cles.execCommand(commandName, params);
         if (!res.isSuccessful()) {
             throw res.getError();
         }
