@@ -148,6 +148,14 @@ public class ResourceBundleHandler extends PageResourceHandler {
         }
     }
 
+    protected String resolveAttribute(FaceletContext ctx, TagAttribute var) {
+        String val = var.getValue(ctx);
+        if (!StringUtils.isBlank(val)) {
+            return val;
+        }
+        return null;
+    }
+
     protected void applyBundle(FaceletContext ctx, UIComponent parent, WebResourceManager wrm, String bundle,
             ResourceType type, String targetValue, FaceletHandler nextHandler) throws IOException {
         switch (type) {
