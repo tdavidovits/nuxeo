@@ -37,7 +37,7 @@
   <h:body>
 
     <nxu:set var="pageCssTarget" value="head">
-    <nxu:set var="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'body':'head'}">
+    <nxu:set var="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'body':''}">
 
       <div class="includes displayNone">
         <ui:insert name="basic body includes" />
