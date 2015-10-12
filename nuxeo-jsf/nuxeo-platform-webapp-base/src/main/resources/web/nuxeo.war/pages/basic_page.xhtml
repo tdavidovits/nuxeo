@@ -27,7 +27,7 @@
         <ui:param name="pageName" value="#{pageName}" />
         <ui:param name="pageFlavor" value="#{pageFlavor}" />
         <ui:param name="pageTarget" value="head" />
-        <ui:param name="pageJsTarget" value="head" />
+        <ui:param name="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'body':'head'}" />
         <ui:param name="pageCssTarget" value="head" />
       </ui:decorate>
     </ui:insert>
@@ -36,11 +36,17 @@
   </h:head>
   <h:body>
 
-    <div class="includes displayNone">
-      <ui:insert name="basic body includes" />
-    </div>
+    <nxu:set var="pageCssTarget" value="head">
+    <nxu:set var="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'body':'head'}">
 
-    <ui:insert name="basic body" />
+      <div class="includes displayNone">
+        <ui:insert name="basic body includes" />
+      </div>
+
+      <ui:insert name="basic body" />
+
+    </nxu:set>
+    </nxu:set>
 
   </h:body>
 
