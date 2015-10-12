@@ -26,9 +26,8 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.web.resources.api.ResourceType;
+import org.nuxeo.ecm.web.resources.jsf.PageResourceRenderer;
 import org.nuxeo.ecm.web.resources.jsf.ResourceBundleRenderer;
 
 /**
@@ -37,8 +36,6 @@ import org.nuxeo.ecm.web.resources.jsf.ResourceBundleRenderer;
  * @since 7.10
  */
 public class ResourceOrderingListener implements SystemEventListener {
-
-    private static final Log log = LogFactory.getLog(ResourceOrderingListener.class);
 
     protected static String TARGET_HEAD = "head";
 
@@ -78,7 +75,7 @@ public class ResourceOrderingListener implements SystemEventListener {
         if ("javax.faces.resource.Stylesheet".equals(rtype)) {
             return true;
         }
-        if (ResourceBundleRenderer.RENDERER_TYPE.equals(rtype)) {
+        if (ResourceBundleRenderer.RENDERER_TYPE.equals(rtype) || PageResourceRenderer.RENDERER_TYPE.equals(rtype)) {
             String type = (String) r.getAttributes().get("type");
             if (ResourceType.css.equals(type) || ResourceType.jsfcss.equals(type)) {
                 return true;
