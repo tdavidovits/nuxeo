@@ -54,7 +54,7 @@ public class UsersTabSubPage extends UsersGroupsBasePage {
     public UsersTabSubPage searchUser(String query) {
         searchInput.clear();
         searchInput.sendKeys(query);
-        searchButton.submit();
+        searchButton.click();
         return asPage(UsersTabSubPage.class);
     }
 
