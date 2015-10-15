@@ -26,9 +26,13 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.web.resources.api.ResourceType;
 import org.nuxeo.ecm.web.resources.jsf.PageResourceRenderer;
 import org.nuxeo.ecm.web.resources.jsf.ResourceBundleRenderer;
+import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.services.config.ConfigurationService;
 
 /**
  * Moves CSS files to the start of the head tag.
@@ -37,7 +41,15 @@ import org.nuxeo.ecm.web.resources.jsf.ResourceBundleRenderer;
  */
 public class ResourceOrderingListener implements SystemEventListener {
 
+    private static final Log log = LogFactory.getLog(ResourceOrderingListener.class);
+
     protected static String TARGET_HEAD = "head";
+
+    protected static String SLOT_CSS_HEAD = "csshead";
+
+    protected static String SLOT_JS_BODY = "jsbody";
+
+    protected static String DEFER_JS_PROP = "nuxeo.jsf.deferJavaScriptLoading";
 
     @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
@@ -53,16 +65,19 @@ public class ResourceOrderingListener implements SystemEventListener {
                 otherResources.add(r);
             }
         }
-        // remove all previous resources
-        for (UIComponent r : resources) {
-            root.removeComponentResource(ctx, r, TARGET_HEAD);
-        }
-        // add them back in desired order
+        // add CSS resources back to the head first slot
         for (UIComponent r : cssResources) {
-            root.addComponentResource(ctx, r, TARGET_HEAD);
+            root.removeComponentResource(ctx, r, TARGET_HEAD);
+            root.addComponentResource(ctx, r, SLOT_CSS_HEAD);
         }
-        for (UIComponent r : otherResources) {
-            root.addComponentResource(ctx, r, TARGET_HEAD);
+        boolean deferJS = deferJsLoading();
+        if (deferJS) {
+            // add other resources to the jsbody slot
+            // add them back in desired order
+            for (UIComponent r : otherResources) {
+                root.removeComponentResource(ctx, r, TARGET_HEAD);
+                root.addComponentResource(ctx, r, SLOT_JS_BODY);
+            }
         }
     }
 
@@ -96,6 +111,11 @@ public class ResourceOrderingListener implements SystemEventListener {
     @Override
     public boolean isListenerForSource(Object source) {
         return (source instanceof UIViewRoot);
+    }
+
+    protected boolean deferJsLoading() {
+        ConfigurationService cs = Framework.getService(ConfigurationService.class);
+        return cs.isBooleanPropertyTrue(DEFER_JS_PROP);
     }
 
 }

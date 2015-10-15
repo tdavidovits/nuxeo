@@ -16,6 +16,8 @@
 
     <ui:insert name="bookmark" />
 
+    <nxr:insert target="csshead" />
+
     <ui:remove>
       Compat templating zones
     </ui:remove>
@@ -26,9 +28,8 @@
       <ui:decorate template="/incl/page_head.xhtml">
         <ui:param name="pageName" value="#{pageName}" />
         <ui:param name="pageFlavor" value="#{pageFlavor}" />
-        <ui:param name="pageTarget" value="head" />
-        <ui:param name="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'body':'head'}" />
-        <ui:param name="pageCssTarget" value="head" />
+        <ui:param name="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'jsbody':null}" />
+        <ui:param name="pageCssTarget" value="csshead" />
       </ui:decorate>
     </ui:insert>
     <ui:insert name="page head" />
@@ -37,7 +38,7 @@
   <h:body>
 
     <nxu:set var="pageCssTarget" value="head">
-    <nxu:set var="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'body':''}">
+    <nxu:set var="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'jsbody':''}">
 
       <div class="includes displayNone">
         <ui:insert name="basic body includes" />
@@ -48,6 +49,7 @@
     </nxu:set>
     </nxu:set>
 
+    <nxr:insert target="jsbody" />
   </h:body>
 
 </html>
