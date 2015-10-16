@@ -35,7 +35,7 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.services.config.ConfigurationService;
 
 /**
- * Moves CSS files to the start of the head tag.
+ * Moves CSS files to the start of the head tag and reorders js resources for better page rendering.
  *
  * @since 7.10
  */
@@ -45,9 +45,11 @@ public class ResourceOrderingListener implements SystemEventListener {
 
     protected static String TARGET_HEAD = "head";
 
-    protected static String SLOT_CSS_HEAD = "csshead";
+    protected static String SLOT_HEAD_START = "headstart";
 
-    protected static String SLOT_JS_BODY = "jsbody";
+    protected static String SLOT_BODY_START = "bodystart";
+
+    protected static String SLOT_BODY_END = "bodyend";
 
     protected static String DEFER_JS_PROP = "nuxeo.jsf.deferJavaScriptLoading";
 
@@ -68,15 +70,30 @@ public class ResourceOrderingListener implements SystemEventListener {
         // add CSS resources back to the head first slot
         for (UIComponent r : cssResources) {
             root.removeComponentResource(ctx, r, TARGET_HEAD);
-            root.addComponentResource(ctx, r, SLOT_CSS_HEAD);
+            root.addComponentResource(ctx, r, SLOT_HEAD_START);
+            if (log.isDebugEnabled()) {
+                String name = (String) r.getAttributes().get("name");
+                if (name == null) {
+                    log.debug(String.format("Pushing %s at the beggining of head tag", r));
+                } else {
+                    log.debug(String.format("Pushing %s at the beggining of head tag", name));
+                }
+            }
         }
         boolean deferJS = deferJsLoading();
         if (deferJS) {
-            // add other resources to the jsbody slot
-            // add them back in desired order
+            // add other resources to the body start
             for (UIComponent r : otherResources) {
                 root.removeComponentResource(ctx, r, TARGET_HEAD);
-                root.addComponentResource(ctx, r, SLOT_JS_BODY);
+                root.addComponentResource(ctx, r, SLOT_BODY_START);
+                if (log.isDebugEnabled()) {
+                    String name = (String) r.getAttributes().get("name");
+                    if (name == null) {
+                        log.debug(String.format("Pushing %s at the end of body tag", r));
+                    } else {
+                        log.debug(String.format("Pushing %s at the end of body tag", name));
+                    }
+                }
             }
         }
     }

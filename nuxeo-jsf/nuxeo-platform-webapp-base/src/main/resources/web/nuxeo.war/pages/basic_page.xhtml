@@ -9,14 +9,13 @@
 
   <f:view contentType="text/html" />
   <h:head id="pageHead">
+    <nxr:insert target="headstart" />
 
     <title>
       <ui:insert name="page title" />
     </title>
 
     <ui:insert name="bookmark" />
-
-    <nxr:insert target="csshead" />
 
     <ui:remove>
       Compat templating zones
@@ -28,17 +27,23 @@
       <ui:decorate template="/incl/page_head.xhtml">
         <ui:param name="pageName" value="#{pageName}" />
         <ui:param name="pageFlavor" value="#{pageFlavor}" />
-        <ui:param name="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'jsbody':null}" />
-        <ui:param name="pageCssTarget" value="csshead" />
+        <ui:param name="pageJsBodyStartTarget" value="bodystart" />
+        <ui:param name="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'bodyend':'bodystart'}" />
+        <ui:param name="pageCssTarget" value="headstart" />
       </ui:decorate>
     </ui:insert>
     <ui:insert name="page head" />
 
+    <nxr:insert target="headend" />
   </h:head>
   <h:body>
+    <nxr:insert target="bodystart" />
 
-    <nxu:set var="pageCssTarget" value="head">
-    <nxu:set var="pageJsTarget" value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'jsbody':''}">
+    <nxu:set var="pageCssTarget" value="headstart">
+    <nxu:set var="pageJsBodyStartTarget" value="bodystart">
+    <nxu:set var="pageJsTarget"
+      value="#{configurationService.isBooleanPropertyTrue('nuxeo.jsf.deferJavaScriptLoading')?'bodyend':''}"
+      cache="true">
 
       <div class="includes displayNone">
         <ui:insert name="basic body includes" />
@@ -48,8 +53,9 @@
 
     </nxu:set>
     </nxu:set>
+    </nxu:set>
 
-    <nxr:insert target="jsbody" />
+    <nxr:insert target="bodyend" />
   </h:body>
 
 </html>

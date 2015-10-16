@@ -42,7 +42,7 @@
       </ul>
     </documentation>
     <property name="nuxeo.jsf.combinePageResources">true</property>
-    <property name="nuxeo.jsf.deferJavaScriptLoading">false</property>
+    <property name="nuxeo.jsf.deferJavaScriptLoading">true</property>
   </extension>
 
 </component>
