@@ -375,7 +375,8 @@
         <resource>jquery.ambiance.js</resource>
         <resource>jquery.ambiance.css</resource>
         <resource>jquery.nuxeo.dropdown.js</resource>
-        <resource>jquery.nuxeo.tipsy.init.js</resource>
+        <!-- NXP-18168: disable tipsy to avoid flicker on images rendering -->
+        <!-- <resource>jquery.nuxeo.tipsy.init.js</resource> -->
         <resource>jquery.magnific-popup.js</resource>
         <resource>magnific-popup.css</resource>
         <resource>nuxeo-lightbox.js</resource>
