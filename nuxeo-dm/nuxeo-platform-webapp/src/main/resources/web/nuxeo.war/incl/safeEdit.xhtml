@@ -14,10 +14,10 @@
     <c:set var="safeEdit_message" value="safeedit.page.has.unsaved.changes" />
   </c:if>
 
-  <h:outputScript src="/scripts/safeEdit.js" target="#{pageJsBodyStartTarget}" />
-  <h:outputScript src="/scripts/safeEditUI.js" target="#{pageJsBodyStartTarget}" />
+  <h:outputScript src="/scripts/safeEdit.js" />
+  <h:outputScript src="/scripts/safeEditUI.js" />
 
-  <h:outputScript target="#{pageJsBodyStartTarget}">
+  <h:outputScript>
     var nuxeo = (function(nuxeo) {
       nuxeo.safeEdit = {
         restorePrompt: {
