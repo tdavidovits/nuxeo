@@ -19,6 +19,7 @@
 String productName = Framework.getProperty("org.nuxeo.ecm.product.name");
 String productVersion = Framework.getProperty("org.nuxeo.ecm.product.version");
 String testerName = Framework.getProperty("org.nuxeo.ecm.tester.name");
+String loginPwdAutocomplete = Framework.getProperty("login.pwd.autocomplete", "true");
 String context = request.getContextPath();
 
 HttpSession httpSession = request.getSession(false);
@@ -348,7 +349,7 @@ body {
               </tr>
               <tr>
                 <td>
-                  <input class="login_input" type="password" name="user_password" id="password" placeholder="<fmt:message bundle="${messages}" key="label.login.password" />">
+                  <input class="login_input" type="password" name="user_password" id="password" autocomplete="<%= loginPwdAutocomplete %>" placeholder="<fmt:message bundle="${messages}" key="label.login.password" />">
                 </td>
               </tr>
               <tr>
