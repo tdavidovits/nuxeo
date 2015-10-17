@@ -49,6 +49,10 @@
 
   <session-config>
     <session-timeout>${session.timeout}</session-timeout>
+    <conkie-config>
+      <http-only>${cookie.http.only}</http-only>
+      <secure>${cookie.secure}</secure>
+    </conkie-config>
   </session-config>
 
 </web-app>
