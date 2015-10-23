@@ -333,7 +333,8 @@ public class TestScriptRunnerInfrastructure {
     @Test
     public void handleDocumentListAsInput() throws OperationException {
         OperationContext ctx = new OperationContext(session);
-        DocumentModelList result = (DocumentModelList) automationService.run(ctx, "Scripting.TestInputDocumentList", null);
+        DocumentModelList result = (DocumentModelList) automationService.run(ctx, "Scripting.TestInputDocumentList",
+                null);
         assertNotNull(result);
     }
 
@@ -371,16 +372,10 @@ public class TestScriptRunnerInfrastructure {
         Map<String, Object> params = new HashMap<>();
         params.put("doc", root);
         Object result = automationService.run(ctx, "Scripting.TestWrappers", params);
-        assertEquals("Root input title:New Title\n" +
-                "Root input title:New Title\n" +
-                "Root ctx title:New Title\n" +
-                "Root ctx title:New Title\n" +
-                "Root params title:New Title\n" +
-                "Root params title:New Title\n" +
-                "Root result title:New Title\n" +
-                "Root result title:New Title\n" +
-                "Root ctx title:New Title\n" +
-                "Root ctx title:New Title\n", outContent.toString());
+        assertEquals("Root input title:New Title\n" + "Root input title:New Title\n" + "Root ctx title:New Title\n"
+                + "Root ctx title:New Title\n" + "Root params title:New Title\n" + "Root params title:New Title\n"
+                + "Root result title:New Title\n" + "Root result title:New Title\n" + "Root ctx title:New Title\n"
+                + "Root ctx title:New Title\n", outContent.toString());
         assertTrue(result instanceof DocumentModel);
         Object doc = ctx.get("doc");
         assertNotNull(doc);
