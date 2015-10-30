@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.faces.application.ResourceDependencies;
+import javax.faces.application.ResourceDependency;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -44,6 +46,10 @@ import com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer;
  *
  * @author <a href="mailto:at@nuxeo.com">Anahide Tchertchian</a>
  */
+@ResourceDependencies({ @ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(library = "org.richfaces", name = "jquery.js"),
+        @ResourceDependency(library = "org.richfaces", name = "richfaces.js"),
+        @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib") })
 public class HtmlEditorRenderer extends HtmlBasicInputRenderer {
 
     private static Map<String, String> pluginsOptions;
@@ -106,6 +112,7 @@ public class HtmlEditorRenderer extends HtmlBasicInputRenderer {
                     editorComp.getHeight(), clientId, pluginsOptions.get("plugins"), locale.getLanguage(),
                     toolbarPluginsOptions.get("toolbar"));
             writer.writeText(scriptContent, null);
+            // to check
             String ajaxScriptContent = String.format(
                     "jsf.ajax.addOnEvent(function(data) {if (data.status == \"success\") {%s}});", scriptContent);
             writer.writeText(ajaxScriptContent, null);
