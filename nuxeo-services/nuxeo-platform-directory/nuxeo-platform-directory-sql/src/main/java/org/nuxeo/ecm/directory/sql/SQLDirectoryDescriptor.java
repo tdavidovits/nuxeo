@@ -65,18 +65,6 @@ public class SQLDirectoryDescriptor {
     @XNode("dataSource")
     public String dataSourceName;
 
-    @XNode("dbDriver")
-    public String dbDriver;
-
-    @XNode("dbUrl")
-    public String dbUrl;
-
-    @XNode("dbUser")
-    public String dbUser;
-
-    @XNode("dbPassword")
-    public String dbPassword;
-
     @XNode("table")
     public String tableName;
 
@@ -188,22 +176,6 @@ public class SQLDirectoryDescriptor {
         this.tableName = tableName;
     }
 
-    public String getDbDriver() {
-        return dbDriver;
-    }
-
-    public String getDbPassword() {
-        return dbPassword;
-    }
-
-    public String getDbUrl() {
-        return dbUrl;
-    }
-
-    public String getDbUser() {
-        return dbUser;
-    }
-
     public String getDataFileName() {
         return dataFileName;
     }
@@ -297,22 +269,6 @@ public class SQLDirectoryDescriptor {
         this.autoincrementIdField = Boolean.valueOf(autoincrementIdField);
     }
 
-    public void setDbDriver(String dbDriver) {
-        this.dbDriver = dbDriver;
-    }
-
-    public void setDbPassword(String dbPassword) {
-        this.dbPassword = dbPassword;
-    }
-
-    public void setDbUrl(String dbUrl) {
-        this.dbUrl = dbUrl;
-    }
-
-    public void setDbUser(String dbUser) {
-        this.dbUser = dbUser;
-    }
-
     public void setInverseReferences(InverseReference[] inverseReferences) {
         this.inverseReferences = inverseReferences;
     }
@@ -376,18 +332,6 @@ public class SQLDirectoryDescriptor {
     public void merge(SQLDirectoryDescriptor other, boolean overwite) {
         if (other.dataSourceName != null || overwite) {
             dataSourceName = other.dataSourceName;
-        }
-        if (other.dbDriver != null || overwite) {
-            dbDriver = other.dbDriver;
-        }
-        if (other.dbUrl != null || overwite) {
-            dbUrl = other.dbUrl;
-        }
-        if (other.dbUser != null || overwite) {
-            dbUser = other.dbUser;
-        }
-        if (other.dbPassword != null || overwite) {
-            dbPassword = other.dbPassword;
         }
         if (other.tableName != null || overwite) {
             tableName = other.tableName;
@@ -469,10 +413,6 @@ public class SQLDirectoryDescriptor {
         clone.schemaName = schemaName;
         clone.parentDirectory = parentDirectory;
         clone.dataSourceName = dataSourceName;
-        clone.dbDriver = dbDriver;
-        clone.dbUrl = dbUrl;
-        clone.dbUser = dbUser;
-        clone.dbPassword = dbPassword;
         clone.tableName = tableName;
         if (initDependencies != null) {
             clone.initDependencies = new ArrayList<String>(initDependencies);

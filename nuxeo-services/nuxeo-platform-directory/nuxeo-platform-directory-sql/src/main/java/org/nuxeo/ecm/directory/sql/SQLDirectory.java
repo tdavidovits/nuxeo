@@ -223,14 +223,10 @@ public class SQLDirectory extends AbstractDirectory {
             return dataSource;
         }
         try {
-            if (!StringUtils.isEmpty(config.dataSourceName)) {
-                dataSource = DataSourceHelper.getDataSource(config.dataSourceName);
-                // InitialContext context = new InitialContext();
-                // dataSource = (DataSource)
-                // context.lookup(config.dataSourceName);
-            } else {
-                dataSource = new SimpleDataSource(config.dbUrl, config.dbDriver, config.dbUser, config.dbPassword);
+            if (StringUtils.isEmpty(config.dataSourceName)) {
+                throw new DirectoryException("Missing datasource for SQL Directory: " + config.name);
             }
+            dataSource = DataSourceHelper.getDataSource(config.dataSourceName);
             log.trace("found datasource: " + dataSource);
             return dataSource;
         } catch (NamingException e) {
