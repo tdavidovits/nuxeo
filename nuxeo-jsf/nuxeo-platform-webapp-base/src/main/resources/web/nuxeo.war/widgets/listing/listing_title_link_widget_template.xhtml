@@ -18,7 +18,9 @@
     <nxd:restDocumentLink document="#{field_0}"
       tab="#{widgetProperty_tab}" subTab="#{widgetProperty_subTab}"
       tabs="#{widgetProperty_tabs}"
-      target="#{widgetProperty_target}">
+      target="#{widgetProperty_target}"
+      view="#{widgetProperty_view}"
+      pattern="#{widgetProperty_pattern}">
       <span id="title_#{field_1}" title="#{label}" class="documentTitle">
        <c:if test="#{widgetProperty_localize}">
         #{messages[nxd:titleOrId(field_0)]}
@@ -34,7 +36,9 @@
         newConversation="true" target="_blank"
         tab="#{widgetProperty_tab}"
         subTab="#{widgetProperty_subTab}"
-        tabs="#{widgetProperty_tabs}">
+        tabs="#{widgetProperty_tabs}"
+        view="#{widgetProperty_view}"
+        pattern="#{widgetProperty_pattern}">
         <nxu:graphicImage value="/icons/external.gif"
           style="vertical-align:middle"
           alt="#{messages['permalink.newTab']}"
