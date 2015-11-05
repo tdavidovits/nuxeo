@@ -24,6 +24,7 @@ import org.openqa.selenium.support.FindBy;
 
 /**
  * @since 5.9.3
+ * @deprecated since 7.10, use {@link UserHomePage} instead.
  */
 public class HomePage extends DocumentBasePage {
 

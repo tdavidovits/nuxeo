@@ -16,7 +16,6 @@
  */
 package org.nuxeo.functionaltests.pages;
 
-import org.nuxeo.functionaltests.AjaxRequestManager;
 import org.nuxeo.functionaltests.fragment.GadgetsContainerFragment;
 import org.nuxeo.functionaltests.pages.tabs.SummaryTabSubPage;
 import org.openqa.selenium.By;
@@ -77,6 +76,14 @@ public class UserHomePage extends AbstractPage {
     public ProfilePage goToProfile() {
         goToTab("nxw_Profile");
         return asPage(ProfilePage.class);
+    }
+
+    /**
+     * @since 7.10
+     */
+    public CollectionsPage goToCollections() {
+        goToTab("nxw_Collections");
+        return asPage(CollectionsPage.class);
     }
 
     protected void goToTab(String id) {

@@ -370,6 +370,7 @@ public class DocumentBasePage extends AbstractPage {
 
     /**
      * @since 5.9.3
+     * @deprecated since 7.10: use {@link #getUserHome()} instead
      */
     public HomePage goToHomePage() {
         homePageLink.click();

@@ -72,7 +72,6 @@ public class ITPersonalWorkspaceTest extends AbstractTest {
         page = page.switchToPersonalWorkspace();
         // check tree shows personal workspace
         getTreeExplorer().findElement(By.linkText("Administrator"));
-        page = page.goToHomePage();
         page = page.goToWorkspaces();
         checkMainTabs();
         // check tree shows personal workspace

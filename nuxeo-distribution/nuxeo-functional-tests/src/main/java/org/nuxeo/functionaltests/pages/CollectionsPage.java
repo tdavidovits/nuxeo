@@ -30,7 +30,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @since 5.9.3
  */
-public class CollectionsPage extends HomePage {
+public class CollectionsPage extends UserHomePage {
 
     @Required
     @FindBy(id = "user_collection_contentview")

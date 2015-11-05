@@ -164,7 +164,7 @@ public class ITCollectionsTest extends AbstractTest {
         workspaceContentTab = addToCollectionForm.addAll(ContentTabSubPage.class);
 
         // Check Collections section in HOME
-        CollectionsPage collectionsPage = fileDocumentBasePage.goToHomePage().goToCollections();
+        CollectionsPage collectionsPage = fileDocumentBasePage.getUserHome().goToCollections();
 
         List<String> collectionNames = collectionsPage.getCollectionNames();
 
@@ -282,7 +282,7 @@ public class ITCollectionsTest extends AbstractTest {
 
         // Login as test user
         documentBasePage = loginAsTestUser();
-        CollectionsPage collectionsPage = documentBasePage.goToHomePage().goToCollections();
+        CollectionsPage collectionsPage = documentBasePage.getUserHome().goToCollections();
         List<String> collections = collectionsPage.getCollectionNames();
         // Check that I can see the second collection but not the first one
         assertEquals(1, collections.size());
