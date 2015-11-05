@@ -230,8 +230,10 @@ public class NuxeoServerSideStateHelper extends ServerSideStateHelper {
         }
 
         int sep = compoundId.indexOf(':');
-        assert (sep != -1);
-        assert (sep < compoundId.length());
+        if (sep == -1 || sep >= compoundId.length()) {
+            log.error("compoundId is malformed: " + compoundId);
+            return null;
+        }
 
         String idInLogicalMap = compoundId.substring(0, sep);
         String idInActualMap = compoundId.substring(sep + 1);
