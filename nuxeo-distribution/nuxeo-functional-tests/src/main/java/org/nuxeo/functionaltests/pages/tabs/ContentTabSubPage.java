@@ -18,6 +18,9 @@
  */
 package org.nuxeo.functionaltests.pages.tabs;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,9 +37,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.google.common.base.Function;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * The content tab sub page. Most of the time available for folderish documents and displaying the current document's
@@ -74,11 +74,8 @@ public class ContentTabSubPage extends DocumentBasePage {
     @FindBy(id = "cv_document_content_0_resetFilterForm:resetFilter")
     WebElement clearFilterButton;
 
-    @FindBy(xpath = "//form[@id=\"document_content\"]//tbody//tr")
-    List<WebElement> childDocumentRows;
-
     public List<WebElement> getChildDocumentRows() {
-        return childDocumentRows;
+        return driver.findElements(By.xpath("//form[@id=\"document_content\"]//tbody//tr"));
     }
 
     public ContentTabSubPage(WebDriver driver) {
@@ -223,8 +220,9 @@ public class ContentTabSubPage extends DocumentBasePage {
     public void selectDocumentByIndex(int... indexes) {
         AjaxRequestManager a = new AjaxRequestManager(driver);
         for (int i : indexes) {
+            WebElement elt = getChildDocumentRows().get(i).findElement(By.xpath(CHECK_BOX_XPATH));
             a.watchAjaxRequests();
-            getChildDocumentRows().get(i).findElement(By.xpath(CHECK_BOX_XPATH)).click();
+            elt.click();
             a.waitForAjaxRequests();
         }
     }
@@ -243,7 +241,7 @@ public class ContentTabSubPage extends DocumentBasePage {
         List<String> titleList = Arrays.asList(titles);
         List<Integer> temp = new ArrayList<Integer>();
         int index = 0;
-        for (WebElement row : childDocumentRows) {
+        for (WebElement row : getChildDocumentRows()) {
             String docTitle = row.findElement(By.xpath(DOCUMENT_TITLE_XPATH)).getText();
             if (docTitle != null && titleList.contains(docTitle)) {
                 temp.add(index);
