@@ -150,7 +150,7 @@ public class ContentTabSubPage extends DocumentBasePage {
         return asPage(DocumentBasePage.class);
     }
 
-    public ContentTabSubPage removeAllDocuments() {
+    public ContentTabSubPage removeAllDocuments(boolean recurse) {
         ContentTabSubPage page = asPage(ContentTabSubPage.class);
         By locator = By.xpath(SELECT_ALL_BUTTON_XPATH);
         if (!hasElement(locator)) {
@@ -160,13 +160,19 @@ public class ContentTabSubPage extends DocumentBasePage {
         findElementWaitUntilEnabledAndClick(By.xpath(SELECT_ALL_BUTTON_XPATH));
         deleteSelectedDocuments();
 
+        page = asPage(ContentTabSubPage.class);
+
         try {
             documentContentForm.findElement(By.tagName("tbody"));
         } catch (NoSuchElementException e) {
             // no more document to remove
             return page;
         }
-        return removeAllDocuments();
+        return recurse ? removeAllDocuments() : page;
+    }
+
+    public ContentTabSubPage removeAllDocuments() {
+        return removeAllDocuments(true);
     }
 
     /**

@@ -20,6 +20,7 @@ package org.nuxeo.functionaltests.pages.admincenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nuxeo.functionaltests.AbstractTest;
 import org.nuxeo.functionaltests.AjaxRequestManager;
 import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.Required;
@@ -79,8 +80,7 @@ public class VocabulariesPage extends AdminCenterBasePage {
      */
     public VocabulariesPage deleteEntry(final String entryId) {
         WebElement entryToBeDeleted = getDirectoryEntryRow(entryId);
-        WebElement entryDeleteButton = entryToBeDeleted.findElement(By.xpath("td/input[@value='Delete']"));
-        entryDeleteButton.click();
+        AbstractTest.click(entryToBeDeleted.findElement(By.xpath("td/input[@value='Delete']")));
         Alert confirmRemove = driver.switchTo().alert();
         confirmRemove.accept();
         Locator.waitForTextPresent(By.id("ambiance-notification"), "Vocabulary entry deleted");

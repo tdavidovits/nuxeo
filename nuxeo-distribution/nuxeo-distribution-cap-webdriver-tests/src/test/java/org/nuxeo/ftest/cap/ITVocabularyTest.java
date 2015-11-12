@@ -16,15 +16,14 @@
  */
 package org.nuxeo.ftest.cap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.nuxeo.functionaltests.AbstractTest;
 import org.nuxeo.functionaltests.Locator;
@@ -45,6 +44,8 @@ import com.google.common.base.Function;
  * @since 5.9.3
  */
 public class ITVocabularyTest extends AbstractTest {
+
+    private static final Log log = LogFactory.getLog(ITVocabularyTest.class);
 
     public final static String L10N_SUBJECTS = "l10nsubjects";
 
@@ -127,6 +128,8 @@ public class ITVocabularyTest extends AbstractTest {
                     driver.findElement(By.xpath("//*[@id='s2id_document_edit:nxl_dublincore:nxw_subjects_1_select2']")),
                     true);
             assertEquals(0, subjectsWidget.getSelectedValues().size());
+        } catch (Exception e) {
+            log.error("Error in testEntryNotFountAndRemove", e);
         } finally {
             logout();
             // Let's recreate the entry to leave state as it was

@@ -51,6 +51,7 @@ public class LogsPage extends MonitoringPage {
         for (WebElement element : serverLogTabs) {
             if (serverLogFileName.equals(element.getText())) {
                 element.click();
+                break;
             }
         }
         return asPage(LogsPage.class);

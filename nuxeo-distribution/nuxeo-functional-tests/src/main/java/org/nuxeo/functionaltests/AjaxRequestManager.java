@@ -18,6 +18,8 @@ package org.nuxeo.functionaltests;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -30,6 +32,8 @@ import com.google.common.base.Function;
  * @since 6.0
  */
 public class AjaxRequestManager {
+
+    private static final Log log = LogFactory.getLog(AjaxRequestManager.class);
 
     protected JavascriptExecutor js;
 
@@ -96,7 +100,7 @@ public class AjaxRequestManager {
         waitUntil((new Function<WebDriver, Boolean>() {
             @Override
             public Boolean apply(WebDriver driver) {
-                Boolean res = (Boolean) js.executeScript("return window.NuxeoTestFaces.finished();");
+                Boolean res = (Boolean) js.executeScript("return window.NuxeoTestFaces === undefined;") || (Boolean) js.executeScript("return window.NuxeoTestFaces.finished();");
                 return res;
             }
         }));

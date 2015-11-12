@@ -19,6 +19,8 @@ package org.nuxeo.functionaltests.pages.admincenter.usermanagement;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.nuxeo.functionaltests.AbstractTest;
+import org.nuxeo.functionaltests.AjaxRequestManager;
 import org.nuxeo.functionaltests.Required;
 import org.nuxeo.functionaltests.pages.admincenter.AdminCenterBasePage;
 import org.openqa.selenium.WebDriver;
@@ -48,7 +50,10 @@ public class UsersGroupsBasePage extends AdminCenterBasePage {
         assertNotNull(selectedTab);
 
         if (!selectedTab.equals(tabLink)) {
+            AjaxRequestManager a = new AjaxRequestManager(driver);
+            a.watchAjaxRequests();
             tabLink.click();
+            a.waitForAjaxRequests();
         }
     }
 
@@ -61,7 +66,7 @@ public class UsersGroupsBasePage extends AdminCenterBasePage {
      */
     public UsersTabSubPage getUsersTab(boolean force) {
         if (force) {
-            usersTabLink.click();
+            AbstractTest.click(usersTabLink);
         } else {
             clickOnLinkIfNotSelected(usersTabLink);
         }

@@ -238,6 +238,7 @@ public class Select2WidgetElement extends WebFragmentImpl {
                     + " returned more than 1 result, the first suggestion will be selected : " + suggestion.getText());
         }
 
+
         AjaxRequestManager arm = new AjaxRequestManager(driver);
         ;
         if (wait4A4J) {

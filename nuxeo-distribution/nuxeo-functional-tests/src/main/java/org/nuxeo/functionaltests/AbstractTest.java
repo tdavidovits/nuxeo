@@ -51,7 +51,6 @@ import org.apache.commons.logging.LogFactory;
 import org.browsermob.proxy.ProxyServer;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
@@ -172,12 +171,6 @@ public abstract class AbstractTest {
 
     public static final int POLLING_FREQUENCY_SECONDS = 1;
 
-    private static final String FIREBUG_XPI = "firebug-1.6.2-fx.xpi";
-
-    private static final String FIREBUG_VERSION = "1.6.2";
-
-    private static final String FIREBUG_M2 = "firebug/firebug/1.6.2-fx";
-
     private static final int PROXY_PORT = 4444;
 
     private static final String HAR_NAME = "http-headers.json";
@@ -283,6 +276,7 @@ public abstract class AbstractTest {
         // misc confs to speed up FF
         profile.setPreference("extensions.ui.dictionary.hidden", true);
         profile.setPreference("layout.spellcheckDefault", 0);
+        profile.setPreference("startup.homepage_welcome_url.additional", "about:blank");
 
         // webdriver logging
         if (Boolean.TRUE.equals(Boolean.valueOf(System.getenv("nuxeo.log.webriver")))) {
@@ -296,7 +290,6 @@ public abstract class AbstractTest {
             log.warn("Webdriver logs saved in " + webdriverlogFile);
         }
 
-        addFireBug(profile);
         JavaScriptError.addExtension(profile);
         Proxy proxy = startProxy();
         if (proxy != null) {
@@ -304,7 +297,7 @@ public abstract class AbstractTest {
             // Workaround: use 127.0.0.2
             proxy.setNoProxy("");
             // setProxyPreferences method does not exist with selenium version 2.43.0
-            profile.setProxyPreferences(proxy);
+            dc.setCapability(CapabilityType.PROXY, proxy);
             // FIXME Should be dc.setCapability(CapabilityType.PROXY, proxy);
         }
         dc.setCapability(FirefoxDriver.PROFILE, profile);
@@ -490,38 +483,6 @@ public abstract class AbstractTest {
 
     private static final String M2_REPO = "repository/";
 
-    protected static void addFireBug(FirefoxProfile profile) throws Exception {
-        // this is preventing from running tests in eclipse
-        // profile.addExtension(AbstractTest.class, "/firebug.xpi");
-
-        File xpi = null;
-        List<String> clf = getClassLoaderFiles();
-        for (String f : clf) {
-            if (f.endsWith("/" + FIREBUG_XPI)) {
-                xpi = new File(f);
-            }
-        }
-        if (xpi == null) {
-            String customM2Repo = System.getProperty("M2_REPO", M2_REPO).replaceAll("/$", "");
-            // try to guess the location in the M2 repo
-            for (String f : clf) {
-                if (f.contains(customM2Repo)) {
-                    String m2 = f.substring(0, f.indexOf(customM2Repo) + customM2Repo.length());
-                    xpi = new File(m2 + "/" + FIREBUG_M2 + "/" + FIREBUG_XPI);
-                    break;
-                }
-            }
-        }
-        if (xpi == null || !xpi.exists()) {
-            log.warn(FIREBUG_XPI + " not found in classloader or local M2 repository");
-            return;
-        }
-        profile.addExtension(xpi);
-
-        // avoid "first run" page
-        profile.setPreference("extensions.firebug.currentVersion", FIREBUG_VERSION);
-    }
-
     protected static void removeFireBug() {
         if (tmp_firebug_xpi != null) {
             tmp_firebug_xpi.delete();
@@ -561,13 +522,6 @@ public abstract class AbstractTest {
         }
     }
 
-    @Before
-    public void setUpAbstract() {
-        if (driver != null) {
-            driver.get(NUXEO_URL + "/wro/api/v1/resource/bundle/nuxeo_includes.js");
-        }
-    }
-
     public static <T> T get(String url, Class<T> pageClassToProxy) {
         if (driver != null) {
             List<JavaScriptError> jsErrors = JavaScriptError.readErrors(driver);
@@ -586,14 +540,7 @@ public abstract class AbstractTest {
                     msg.append(" line ").append(jsError.getLineNumber());
                 }
                 msg.append("]");
-                if (driver != null) {
-                    ScreenshotTaker taker = new ScreenshotTaker();
-                    taker.takeScreenshot(driver, "NXP-17647-");
-                    taker.dumpPageSource(driver, "NXP-17647-");
-                    driver.get(NUXEO_URL + "/wro/api/v1/resource/bundle/nuxeo_includes.js");
-                    taker.dumpPageSource(driver, "NXP-17647-includes-js");
-                }
-                fail(msg.toString());
+                log.error(msg.toString());
             }
         }
         driver.get(url);
@@ -984,6 +931,13 @@ public abstract class AbstractTest {
         } catch (NumberFormatException e) {
             log.warn("Could not parse browser version: " + browserVersion);
         }
+    }
+
+    /**
+     * @since 8.1
+     */
+    public static void click(WebElement element) {
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("jQuery(document.getElementById('" + element.getAttribute("id") + "')).click()");
     }
 
 }

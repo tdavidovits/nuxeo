@@ -21,6 +21,7 @@ package org.nuxeo.functionaltests.pages.admincenter.usermanagement;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.functionaltests.AjaxRequestManager;
 import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.Required;
 import org.nuxeo.functionaltests.forms.Select2WidgetElement;
@@ -112,7 +113,17 @@ public class UserCreationFormPage extends UsersGroupsBasePage {
                         true);
                 groups.selectValue(group);
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            AjaxRequestManager a = new AjaxRequestManager(driver);
+            a.watchAjaxRequests();
             createButton.click();
+            a.waitForAjaxRequests();
+            a.waitForJQueryRequests();
         } else {
             usernameInput.sendKeys(username);
             firstnameInput.sendKeys(firstname);
@@ -126,7 +137,11 @@ public class UserCreationFormPage extends UsersGroupsBasePage {
                         true);
                 groups.selectValue(group);
             }
+            AjaxRequestManager a = new AjaxRequestManager(driver);
+            a.watchAjaxRequests();
             createButton.click();
+            a.waitForAjaxRequests();
+            a.waitForJQueryRequests();
         }
         return asPage(UsersGroupsBasePage.class);
     }
@@ -138,7 +153,10 @@ public class UserCreationFormPage extends UsersGroupsBasePage {
 
     protected void switchCreationFormPage() {
         if (!isImmediateCreationYesSelected()) {
+            AjaxRequestManager a = new AjaxRequestManager(driver);
+            a.watchAjaxRequests();
             immediateCreation.get(1).click();
+            a.waitForAjaxRequests();
             Locator.waitUntilElementPresent(By.id("createUserView:createUser:nxl_user:nxw_passwordMatcher_firstPassword"));
         }
     }
