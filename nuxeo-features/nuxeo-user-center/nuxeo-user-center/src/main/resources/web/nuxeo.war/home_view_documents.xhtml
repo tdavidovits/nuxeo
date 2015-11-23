@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<nxthemes:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:nxthemes="http://nuxeo.org/nxthemes"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:nxl="http://nuxeo.org/nxforms/layout">
+
+  <ui:define name="page title">
+    <h:outputText value="#{nuxeoApplicationName} - #{nxd:titleOrId(currentDocument)}"/>
+  </ui:define>
+
+  <ui:define name="body">
+
+    <nxl:widget name="homeLinks" mode="view" value="#{currentDocument}" />
+
+    <h:form id="document_header_layout_form" class="titleBlock">
+      <nxl:documentLayout documentMode="header" mode="view"
+        value="#{currentDocument}" defaultLayout="document_header"
+        includeAnyMode="false" />
+    </h:form>
+
+    <nxl:widget name="documentTabs" mode="view" value="#{currentDocument}" />
+
+  </ui:define>
+
+</nxthemes:composition>
