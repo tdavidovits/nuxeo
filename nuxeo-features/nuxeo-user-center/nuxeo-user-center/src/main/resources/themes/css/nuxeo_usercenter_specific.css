@@ -1,0 +1,24 @@
+/*
+Specific styles for the Home View
+=Main Frame -> small adjustments
+author: lkemen@nuxeo.com
+*/
+
+/* =Main Frame */
+.nxMainContainer {
+  background: none "color.major.stronger (__FLAVOR__ background)"; }
+
+/* =Override GWT styles*/
+body,
+table td,
+select {
+  font-family: "default (__FLAVOR__ font)" }
+
+.widget .content {
+  width: 100% }
+
+.adminViewContent p.directoryBack {
+  padding: .2em .2em .2em 2em }
+
+.description_block span {
+  font-size: 1em }
