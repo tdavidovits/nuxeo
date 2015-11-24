@@ -1,0 +1,39 @@
+html, body {}
+body { font: normal 11px 'Lucida Grande', Verdana, Arial, sans-serif }
+
+p, div, table { margin: 0; padding: 0 }
+
+a:link { color:#0066cc; text-decoration: none }
+a:hover { text-decoration: underline }
+
+img { border: none }
+
+button {
+  line-height: 100%;
+  cursor: pointer;
+  color: #333;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.1em 0.5em 0.2em;
+  margin:.5em 1em .5em 0;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  -webkit-border-radius: .3em;
+  -moz-border-radius: .3em;
+  border-radius: .3em;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	border: solid 1px #da7c0c;
+	background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 100%) #f1f2f3;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#eaeaea)) #f1f2f3;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f1f2f3');
+}
+
+#content { padding: .5em; overflow: auto }
+
+.tools { background-color: #f7f7f7; padding: .5em }
+
+#nxDocumentList { width:98%; margin:0 auto }
+
+/* Override GWT default values */
+iframe.gwt-Frame { overflow: auto!important; overflow-x: scroll!important }
