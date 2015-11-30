@@ -38,7 +38,6 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.event.CoreEventConstants;
 import org.nuxeo.ecm.core.api.pathsegment.PathSegmentService;
-import org.nuxeo.ecm.core.api.pathsegment.PathSegmentServiceDefault;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventProducer;
@@ -111,8 +110,7 @@ public abstract class AbstractUserWorkspaceImpl implements UserWorkspaceService 
     }
 
     @Override
-    public DocumentModel getCurrentUserPersonalWorkspace(String userName, DocumentModel currentDocument)
-            {
+    public DocumentModel getCurrentUserPersonalWorkspace(String userName, DocumentModel currentDocument) {
         if (currentDocument == null) {
             return null;
         }
@@ -120,8 +118,7 @@ public abstract class AbstractUserWorkspaceImpl implements UserWorkspaceService 
     }
 
     @Override
-    public DocumentModel getCurrentUserPersonalWorkspace(CoreSession userCoreSession, DocumentModel context)
-            {
+    public DocumentModel getCurrentUserPersonalWorkspace(CoreSession userCoreSession, DocumentModel context) {
         return getCurrentUserPersonalWorkspace(userCoreSession.getPrincipal(), null, userCoreSession, context);
     }
 
@@ -186,8 +183,7 @@ public abstract class AbstractUserWorkspaceImpl implements UserWorkspaceService 
     }
 
     @Override
-    public DocumentModel getUserPersonalWorkspace(NuxeoPrincipal principal, DocumentModel context)
-            {
+    public DocumentModel getUserPersonalWorkspace(NuxeoPrincipal principal, DocumentModel context) {
         return getCurrentUserPersonalWorkspace(principal, null, context.getCoreSession(), context);
     }
 
