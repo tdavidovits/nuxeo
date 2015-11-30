@@ -16,6 +16,7 @@
  */
 package org.nuxeo.ftest.cap;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +37,7 @@ import org.nuxeo.functionaltests.pages.admincenter.usermanagement.UsersGroupsBas
 import org.nuxeo.functionaltests.pages.admincenter.usermanagement.UsersTabSubPage;
 import org.nuxeo.functionaltests.pages.tabs.EditTabSubPage;
 import org.nuxeo.functionaltests.pages.tabs.PermissionsSubPage;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -153,8 +155,11 @@ public class ITSafeEditTest extends AbstractTest {
      * @since 5.7.1
      */
     private void byPassLeavePagePopup() {
-        ((JavascriptExecutor) driver).executeScript("window.onbeforeunload = function(e){};");
-        ((JavascriptExecutor) driver).executeScript("jQuery(window).unbind('unload');");
+        Alert alert = driver.switchTo().alert();
+        assertEquals(
+                "This page is asking you to confirm that you want to leave - data you have entered may not be saved.",
+                alert.getText());
+        alert.dismiss();
     }
 
     private void checkSafeEditRestoreProvided() {
@@ -275,20 +280,15 @@ public class ITSafeEditTest extends AbstractTest {
         assertTrue(lsItem != null && lsItem.length() > 0);
         assertTrue(lsItem.contains(lookupString));
 
-        /*
-         * // Let's leave the edit tab of the workspace with unsaved changes. A // popup should prevent us from doing
-         * that try { documentBasePage.getContentTab(); // Should never occur
-         * fail("There are unsaved modifications pending and the page can only be left after clicking \"Leave this page\""
-         * ); } catch (UnhandledAlertException e) { // Expected behavior // The following is a workaround to by pass the
-         * popup windows which // is supposed to prevent the user from leaving the page with // unsaved modifications
-         * log.debug("3 - " + localStorage.getLocalStorageLength()); byPassLeavePagePopup(); log.debug("4 - " +
-         * localStorage.getLocalStorageLength()); }
-         */
-
-        // The following is a workaround to by pass the popup windows which
-        // is supposed to prevent the user from leaving the page with
-        // unsaved modifications
+        // Let's leave the document page with unsaved changes and check the popup
+        log.debug("3 - " + localStorage.getLocalStorageLength());
+        driver.findElement(By.linkText("Sections")).click();
         byPassLeavePagePopup();
+        log.debug("4 - " + localStorage.getLocalStorageLength());
+
+        // Let's leave the edit tab of the workspace with unsaved changes. A
+        // popup should also prevent us from doing that
+        // TODO
 
         // We leave the page and get back to it. Since we didn't save, the
         // title must be the initial one.
@@ -315,8 +315,13 @@ public class ITSafeEditTest extends AbstractTest {
         titleEltValue = titleElt.getAttribute("value");
         assertTrue(titleEltValue.equals(NEW_WORKSPACE_TITLE));
 
-        byPassLeavePagePopup();
+        // FIXME NXP-18443
+        // byPassLeavePagePopup();
         documentBasePage.getContentTab();
+        driver.findElement(By.linkText("Sections")).click();
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+        // end of FIXME
         logout();
 
         restoreSate();
@@ -358,7 +363,8 @@ public class ITSafeEditTest extends AbstractTest {
 
         // We leave the page without saving, the safeEdit mechanism should be
         // triggered ...
-        byPassLeavePagePopup();
+        // FIXME NXP-18443
+        // byPassLeavePagePopup();
         filePage.getSummaryTab();
         filePage.getEditTab();
 
