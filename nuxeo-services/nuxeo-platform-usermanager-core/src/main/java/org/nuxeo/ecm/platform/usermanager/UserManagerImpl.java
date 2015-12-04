@@ -459,6 +459,17 @@ public class UserManagerImpl implements UserManager, MultiTenantUserManager, Adm
         return makePrincipal(userEntry, false, user.getGroups());
     }
 
+    protected NuxeoPrincipal makeTransientPrincipal(String username) {
+        DocumentModel userEntry = BaseSession.createEntryModel(null, userSchemaName, username, null);
+        userEntry.setProperty(userSchemaName, userIdField, username);
+        NuxeoPrincipal principal = makePrincipal(userEntry, false, true, null);
+        String[] parts = username.split("/");
+        String email = parts[1];
+        principal.setFirstName(email);
+        principal.setEmail(email);
+        return principal;
+    }
+
     protected DocumentModel makeVirtualUserEntry(String id, VirtualUser user) {
         final DocumentModel userEntry = BaseSession.createEntryModel(null, userSchemaName, id, null);
         // at least fill id field
@@ -480,16 +491,21 @@ public class UserManagerImpl implements UserManager, MultiTenantUserManager, Adm
     }
 
     protected NuxeoPrincipal makePrincipal(DocumentModel userEntry, boolean anonymous, List<String> groups) {
+        return makePrincipal(userEntry, anonymous, false, groups);
+    }
+
+    protected NuxeoPrincipal makePrincipal(DocumentModel userEntry, boolean anonymous, boolean isTransient,
+            List<String> groups) {
         boolean admin = false;
         String username = userEntry.getId();
 
         List<String> virtualGroups = new LinkedList<String>();
         // Add preconfigured groups: useful for LDAP, not for anonymous users
-        if (defaultGroup != null && !anonymous) {
+        if (defaultGroup != null && !anonymous && !isTransient) {
             virtualGroups.add(defaultGroup);
         }
         // Add additional groups: useful for virtual users
-        if (groups != null) {
+        if (groups != null && !isTransient) {
             virtualGroups.addAll(groups);
         }
         // Create a default admin if needed
@@ -1158,6 +1174,9 @@ public class UserManagerImpl implements UserManager, MultiTenantUserManager, Adm
         }
         if (virtualUsers.containsKey(username)) {
             return makeVirtualPrincipal(virtualUsers.get(username));
+        }
+        if (NuxeoPrincipal.isTransientUsername(username)) {
+            return makeTransientPrincipal(username);
         }
         DocumentModel userModel = getUserModel(username, context);
         if (userModel != null) {

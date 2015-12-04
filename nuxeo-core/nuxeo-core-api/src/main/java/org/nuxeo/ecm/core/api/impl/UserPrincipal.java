@@ -274,4 +274,10 @@ public class UserPrincipal implements NuxeoPrincipal, Serializable {
         return getOriginatingUser() == null ? getName() : getOriginatingUser();
     }
 
+    @Override
+    public boolean isTransient() {
+        String name = getName();
+        return name != null && name.startsWith(TRANSIENT_USER_PREFIX);
+    }
+
 }
