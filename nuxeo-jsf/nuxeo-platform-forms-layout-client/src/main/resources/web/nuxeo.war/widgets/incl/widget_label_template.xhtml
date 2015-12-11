@@ -28,7 +28,7 @@ Accepted parameters:
         <ui:param name="label" value="#{nxu:test(empty widgetLabel, defaultLabel, widgetLabel)}" />
         <ui:param name="helpLabel" value="#{widgetHelpLabel}" />
         <ui:param name="translated" value="#{widget.translated}" />
-        <ui:param name="required" value="#{widget.required}" />
+        <ui:param name="required" value="#{widget.required and isEditMode}" />
       </ui:include>
     </nxu:set>
   </nxu:set>

@@ -12,8 +12,6 @@ Accepted parameters:
 - helpLabel: the help label
 - translated: wether the labels should be translated or not
 - required: boolean indicating if the required field indicator should be displayed
-- isEditMode: boolean indicating if it is in edit mode (to display
-  required field indicators), optional
 - hideHelp: boolean indicating if the help should label be hidden, optional
 - labelStyleClass: CSS style class for the label item, optional
 </c:if>
@@ -23,7 +21,7 @@ Accepted parameters:
 
     <c:if test="#{empty helpLabel or hideHelp}">
       <h:outputText value="#{translatedLabel}"
-        styleClass="widgetLabel #{labelStyleClass} #{nxu:test(required and isEditMode, 'required', '')}" />
+        styleClass="widgetLabel #{labelStyleClass} #{nxu:test(required, 'required', '')}" />
     </c:if>
     <c:if test="#{not empty helpLabel and not hideHelp}">
       <div class="widgetHelpLabel">
@@ -31,7 +29,7 @@ Accepted parameters:
           value="#{nxu:test(translated, messages[helpLabel], helpLabel)}">
           <h:outputText value="#{translatedLabel}"
             title="#{translatedHelpLabel}"
-            styleClass="widgetLabel tipsyShow tipsyGravityNW #{labelStyleClass} #{nxu:test(widget.required and isEditMode, 'required', '')}" />
+            styleClass="widgetLabel tipsyShow tipsyGravityNW #{labelStyleClass} #{nxu:test(required, 'required', '')}" />
         </nxu:set>
       </div>
     </c:if>
